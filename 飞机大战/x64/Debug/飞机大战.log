@@ -1,2 +1,15 @@
 ﻿  源.cpp
-  飞机大战.vcxproj -> C:\Users\abc15\Documents\c\飞机大战\x64\Debug\飞机大战.exe
+N:\vs\VC\Auxiliary\VS\include\graphics.h(1,1): warning C4828: 文件包含在偏移 0x19d3 处开始的字符，该字符在当前源字符集中无效(代码页 936)。
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(67,26): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(67,17): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(68,27): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(68,17): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(74,31): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(74,20): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(75,31): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(75,20): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(84,35): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(84,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(85,35): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+C:\Users\abc15\Downloads\game-Aircraft-firing-main\飞机大战\源.cpp(85,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+  飞机大战.vcxproj -> C:\Users\abc15\Downloads\game-Aircraft-firing-main\x64\Debug\飞机大战.exe
