@@ -5,69 +5,98 @@
 
 enum My
 {
-	WIDTH = 480,//å®šä¹‰çš„çª—å£å®½åº¦å’Œé«˜åº¦
+	WIDTH = 480,//¶¨ÒåµÄ´°¿Ú¿í¶ÈºÍ¸ß¶È
 	HEIGHT = 700,
-	BULLLET_NUM = 15,//å­å¼¹æ•°
-	ENEMY1_NUM=10//æ•Œäººæ•°
+	BULLLET_NUM = 100,//×Óµ¯Êı
+	ENEMY1_NUM = 10,//µĞÈËÊı
+	BIG,
+	SMALL
 };
 
-//å›¾ç‰‡åŠ è½½è¿›ç¨‹åº
+//Í¼Æ¬¼ÓÔØ½ø³ÌĞò
 IMAGE bk;
 IMAGE img_role[2];
 IMAGE img_bull[2];
-IMAGE img_enemy1[2];
+IMAGE img_enemy1[2][2];
 
 
 
-struct Plance//é£æœºç»“æ„
+struct Plance//·É»ú½á¹¹
 {
 	double x;
 	double y;
-	bool live;//é£æœºå­˜æ´»
+	bool live;//·É»ú´æ»î
+	double width;
+	double height;//¿íºÍ¸ß
+	int type;//ÀàĞÍ
+	int hp;
 }player,enemy1[ENEMY1_NUM],bull[BULLLET_NUM];
 
 
 
-void loadImg()//åŠ è½½å›¾ç‰‡
+void loadImg()//¼ÓÔØÍ¼Æ¬
 {
 	loadimage(&bk, "background.png");
 	loadimage(&img_role[0], "we3.png");
 	loadimage(&img_role[1], "me4.png");
 	loadimage(&img_bull [0] , "bullet3.png");
 	loadimage(&img_bull[1], "bullet4.png");
-	loadimage(&img_enemy1[0], "enemy222.png");
-	loadimage(&img_enemy1[1], "enemy111.png");
+	loadimage(&img_enemy1[0][0], "enemy222.png");
+	loadimage(&img_enemy1[1][0], "enemy111.png");
+	loadimage(&img_enemy1[0][1], "enemy2222.png");
+	loadimage(&img_enemy1[1][1], "enemy1111.png");
 
 }
 
-void GameInit()//åˆå§‹åŒ–
+void ememyHP(int i)
+{
+	if (rand() % 10 == 0)//0~9
+	{
+		enemy1[i].type = BIG;
+		enemy1[i].hp = 3;
+		enemy1[i].width = 69;
+		enemy1[i].height = 99;
+	}
+	else
+	{
+		enemy1[i].type = SMALL;
+		enemy1[i].hp = 1;
+		enemy1[i].width = 51;
+		enemy1[i].height = 57;
+	}
+}
+void GameInit()//³õÊ¼»¯
 {
 	loadImg();
 	player.x = WIDTH / 2;
 	player.y = HEIGHT - 120;
 	player.live = true;
-	for (int i = 0;i < BULLLET_NUM;i++)
+	for (int i = 0;i < BULLLET_NUM;i++)//³õÊ¼»¯×Óµ¯
 	{
 		bull[i].x = 0;
 		bull[i].y = 0;
 		bull[i].live = false;
 	}
-	for (int i = 0;i < ENEMY1_NUM;i++)
+	for (int i = 0;i < ENEMY1_NUM;i++)//³õÊ¼»¯µĞ»ú
 	{
 		enemy1[i].x = 0;
 		enemy1[i].y = 0;
+		enemy1[i].live = false;
+		ememyHP(i);
 	}
 }
 
 
-void GameDraw()//è´´å›¾
+
+
+void GameDraw()//ÌùÍ¼
 {
-	//è´´èƒŒæ™¯å›¾
+	//Ìù±³¾°Í¼
 	putimage(0, 0, &bk);
 	putimage(player.x,player.y, &img_role[0],NOTSRCERASE);
 	putimage(player.x, player.y, &img_role[1],SRCINVERT);
 	
-	for (int i = 0;i < BULLLET_NUM;i++)//è´´å­å¼¹å›¾
+	for (int i = 0;i < BULLLET_NUM;i++)//Ìù×Óµ¯Í¼
 	{
 		if (bull[i].live)
 		{
@@ -77,17 +106,23 @@ void GameDraw()//è´´å›¾
 		
 	}
 	
-	for (int i = 0;i < ENEMY1_NUM;i++)//è´´æ•Œäººå›¾
+	for (int i = 0;i < ENEMY1_NUM;i++)//ÌùµĞÈËÍ¼
 	{
-		if (enemy1[i].live)
+		if (enemy1[i].live&&enemy1[i].type==SMALL)
 		{
-			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1[0], NOTSRCERASE);
-			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1[1], SRCINVERT);
+			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1[0][0], NOTSRCERASE);
+			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1[1][0], SRCINVERT);
+
+		}
+		else if (enemy1[i].live && enemy1[i].type == BIG)
+		{
+			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1[0][1], NOTSRCERASE);
+			putimage(enemy1[i].x, enemy1[i].y, &img_enemy1[1][1], SRCINVERT);
 		}
 
 	}
 }
-void createBullet()//å­å¼¹äº§ç”Ÿ 
+void createBullet()//×Óµ¯²úÉú 
 {
 	for (int i = 0;i < BULLLET_NUM;i++)
 	{
@@ -102,7 +137,7 @@ void createBullet()//å­å¼¹äº§ç”Ÿ
 
 }
 
-void BulletMove(double speed)//å­å¼¹ç§»åŠ¨
+void BulletMove(double speed)//×Óµ¯ÒÆ¶¯
 {
 
 	for (int i = 0;i < BULLLET_NUM;i++)
@@ -119,7 +154,7 @@ void BulletMove(double speed)//å­å¼¹ç§»åŠ¨
 
 }
 
-void createEnemy1()//æ•Œäºº1äº§ç”Ÿ
+void createEnemy1()//µĞÈË1²úÉú
 {
 
 	for (int i = 0;i < ENEMY1_NUM;i++)
@@ -135,7 +170,7 @@ void createEnemy1()//æ•Œäºº1äº§ç”Ÿ
 	}
 }
 
-void Enemy1Move(double speed)//æ•Œäºº1ç§»åŠ¨
+void Enemy1Move(double speed)//µĞÈË1ÒÆ¶¯
 {
 	for (int i = 0;i < ENEMY1_NUM;i++)
 	{
@@ -151,16 +186,16 @@ void Enemy1Move(double speed)//æ•Œäºº1ç§»åŠ¨
 	
 }
 
-void playerMove(double speed)//ç©å®¶ç§»åŠ¨
+void playerMove(double speed)//Íæ¼ÒÒÆ¶¯
 {
-	//æ£€æµ‹æ˜¯å¦æœ‰é”®ç›˜æŒ‰ä¸‹ï¼Œå¦‚æœæœ‰è¿”å›çœŸï¼Œæ²¡æœ‰è¿”å›å‡ï¼Œè§£å†³äº†é˜»å¡é—®é¢˜
-	// å¦å¤–ä¸€ç§è§£å†³é˜»å¡çš„åŠæ³•æ˜¯ä½¿ç”¨#if GetAsyncKeyState(VK_UP)
-	// éé˜»å¡å‡½æ•°ï¼Œå¾ˆä¸æ»‘
-	//1,_getch()é˜»å¡å‡½æ•°ï¼Œæ²¡è¾“å…¥å°±ä¼šå¡ä½ï¼Œéœ€è¦å¤´å‡½æ•°conio.h
-#if 0//è¿™ä¸ªè¾“å…¥å‡½æ•°å¿…é¡»ç”¨å¤§å†™å­—æ¯
+	//¼ì²âÊÇ·ñÓĞ¼üÅÌ°´ÏÂ£¬Èç¹ûÓĞ·µ»ØÕæ£¬Ã»ÓĞ·µ»Ø¼Ù£¬½â¾öÁË×èÈûÎÊÌâ
+	// ÁíÍâÒ»ÖÖ½â¾ö×èÈûµÄ°ì·¨ÊÇÊ¹ÓÃ#if GetAsyncKeyState(VK_UP)
+	// ·Ç×èÈûº¯Êı£¬ºÜË¿»¬
+	//1,_getch()×èÈûº¯Êı£¬Ã»ÊäÈë¾Í»á¿¨×¡£¬ĞèÒªÍ·º¯Êıconio.h
+#if 0//Õâ¸öÊäÈëº¯Êı±ØĞëÓÃ´óĞ´×ÖÄ¸
 	if (_kbhit())
 	{
-		char key = _getch();//è¯»å–é”®ç›˜æ“ä½œ
+		char key = _getch();//¶ÁÈ¡¼üÅÌ²Ù×÷
 		switch (key)
 		{
 		case 'w':
@@ -211,14 +246,14 @@ void playerMove(double speed)//ç©å®¶ç§»åŠ¨
 
 #endif
 	static DWORD t1 = 0, t2 = 0,t3=0,t4=0;
-	if (GetAsyncKeyState(VK_SPACE)&&t2-t1>500)//åˆ›å»ºå­å¼¹
+	if (GetAsyncKeyState(VK_SPACE)&&t2-t1>5)//´´½¨×Óµ¯
 	{
 		createBullet();
 		t1 = t2;
 	}
 	t2 = GetTickCount();
 
-	if (t4 - t3 > 5000)//åˆ›å»ºæ•Œäºº
+	if (t4 - t3 > 5000)//´´½¨µĞÈË
 	{
 		createEnemy1();
 		t3 = t4;
@@ -227,39 +262,19 @@ void playerMove(double speed)//ç©å®¶ç§»åŠ¨
 
 }
 
-void playPlance()
-{
-	for (int i = 0;i < ENEMY1_NUM;i++)
-	{
-		if (!enemy1[i].live)
-			continue;
-		for (int k = 0;k < BULLLET_NUM;k++)
-		{
-			if (!bull[k].live)
-				continue;
-			if (bull[k].x > enemy1[i].x && bull[k].x<enemy1[1].x + enemy1[i].widtd
-				&& bull[k].y>enemy1[i].y && bull[k].y < enemy1[i].y + enemy1[i].height)
-			{
-
-			}
-		}
-	}
-}
-
-
 int main()
 {
-	//åˆ›å»ºçª—å£
+	//´´½¨´°¿Ú
 	initgraph(WIDTH,HEIGHT,SHOWCONSOLE);
 	GameInit();
-	BeginBatchDraw();//å¼€å§‹åŒç¼“å†²
+	BeginBatchDraw();//¿ªÊ¼Ë«»º³å
 	while (1)
 	{
-		GameDraw();//è´´å›¾
-		EndBatchDraw();//ç»“æŸåŒç¼“å†²
-		playerMove(0.1);//ç©å®¶ç§»åŠ¨
-		BulletMove(0.1);//å­å¼¹ç§»åŠ¨
-		Enemy1Move(0.05);//æ•Œäºº1ç§»åŠ¨
+		GameDraw();//ÌùÍ¼
+		EndBatchDraw();//½áÊøË«»º³å
+		playerMove(0.3);//Íæ¼ÒÒÆ¶¯
+		BulletMove(1);//×Óµ¯ÒÆ¶¯
+		Enemy1Move(0.1);//µĞÈË1ÒÆ¶¯
 
 
 	
