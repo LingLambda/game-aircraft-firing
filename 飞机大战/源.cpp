@@ -7,8 +7,8 @@ enum My
 {
 	WIDTH = 480,//定义的窗口宽度和高度
 	HEIGHT = 700,
-	BULLLET_NUM = 100,//子弹数
-	ENEMY1_NUM = 10,//敌人数
+	BULLLET_NUM = 10,//子弹数
+	ENEMY1_NUM = 100,//敌人数
 	BIG,
 	SMALL
 };
@@ -50,26 +50,29 @@ void loadImg()//加载图片
 
 void ememyHP(int i)
 {
-	if (rand() % 10 == 0)//0~9
+	for (int i = 0;i < ENEMY1_NUM;i++)
 	{
-		enemy1[i].type = BIG;
-		enemy1[i].hp = 3;
-		enemy1[i].width = 69;
-		enemy1[i].height = 99;
-	}
-	else
-	{
-		enemy1[i].type = SMALL;
-		enemy1[i].hp = 1;
-		enemy1[i].width = 51;
-		enemy1[i].height = 57;
+		if (rand() % 10 >6)//0~9
+		{
+			enemy1[i].type = BIG;
+			enemy1[i].hp = 3;
+			enemy1[i].width = 69;
+			enemy1[i].height = 99;
+		}
+		else
+		{
+			enemy1[i].type = SMALL;
+			enemy1[i].hp = 1;
+			enemy1[i].width = 51;
+			enemy1[i].height = 57;
+		}
 	}
 }
 void GameInit()//初始化
 {
 	loadImg();
 	player.x = WIDTH / 2;
-	player.y = HEIGHT - 120;
+	player.y = HEIGHT - 20;
 	player.live = true;
 	for (int i = 0;i < BULLLET_NUM;i++)//初始化子弹
 	{
@@ -162,11 +165,20 @@ void createEnemy1()//敌人1产生
 		if (!enemy1[i].live)
 		{
 			enemy1[i].x = rand() % WIDTH;
-			enemy1[i].y = -200;
+			enemy1[i].y = -100;
 			enemy1[i].live = true;
-			printf("fuk you");
+			if (enemy1[i].type == BIG)
+			{
+				enemy1[i].hp = 3;
+			}
+				
+			else if (enemy1[i].type == SMALL)
+			{
+				enemy1[i].hp = 1;
+			}
 			break;
 		}
+		
 	}
 }
 
@@ -177,9 +189,11 @@ void Enemy1Move(double speed)//敌人1移动
 		if (enemy1[i].live)
 		{
 			enemy1[i].y += speed;
-			if (bull[i].y >HEIGHT)
+			
+			if (enemy1[i].y >= HEIGHT)
 			{
-				bull[i].live = false;
+				enemy1[i].live = false;
+				printf("ok");
 			}
 		}
 	}
@@ -246,21 +260,47 @@ void playerMove(double speed)//玩家移动
 
 #endif
 	static DWORD t1 = 0, t2 = 0,t3=0,t4=0;
-	if (GetAsyncKeyState(VK_SPACE)&&t2-t1>5)//创建子弹
+	if (GetAsyncKeyState(VK_SPACE)&&t2-t1>300)//创建子弹
 	{
 		createBullet();
 		t1 = t2;
 	}
 	t2 = GetTickCount();
 
-	if (t4 - t3 > 5000)//创建敌人
+	if (t4 - t3 > 1000)//创建敌人
 	{
 		createEnemy1();
 		t3 = t4;
+		printf("创建1\n");
 	}
 	t4 = GetTickCount();
 
 }
+
+void playPlance()//判断击中
+{
+	for (int i = 0;i < ENEMY1_NUM;i++)
+	{
+		if (!enemy1[i].live)
+			continue;
+		for (int k = 0;k < BULLLET_NUM;k++)
+		{
+			if (bull[k].live&&bull[k].x > enemy1[i].x && bull[k].x<enemy1[i].x + enemy1[i].width && 
+				bull[k].y>enemy1[i].y && bull[k].y < enemy1[i].y + enemy1[i].height)
+			{
+				bull[k].live = false;
+				enemy1[i].hp--;
+				printf("die");
+			}
+			
+		}
+		if (enemy1[i].hp <= 0)
+		{
+			enemy1[i].live = false;
+		}
+	}
+}
+
 
 int main()
 {
@@ -271,14 +311,14 @@ int main()
 	while (1)
 	{
 		GameDraw();//贴图
-		EndBatchDraw();//结束双缓冲
-		playerMove(0.3);//玩家移动
-		BulletMove(1);//子弹移动
-		Enemy1Move(0.1);//敌人1移动
-
-
-	
+		FlushBatchDraw();//执行未完成的绘制任务
+		playerMove(0.05);//玩家移动
+		Enemy1Move(0.03);//敌人1移动
+		BulletMove(0.1);//子弹移动
+		playPlance();//判断击中
+		
 	}
+	EndBatchDraw();//结束双缓冲
 	return 0;
 
 }
