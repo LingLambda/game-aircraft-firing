@@ -5,13 +5,13 @@
 
 enum My
 {
-	WIDTH = 480,//¶¨ÒåµÄ´°¿Ú¿í¶ÈºÍ¸ß¶È
+	WIDTH = 480,//å®šä¹‰çš„çª—å£å®½åº¦å’Œé«˜åº¦
 	HEIGHT = 700,
-	BULLLET_NUM = 15,//×Óµ¯Êı
-	ENEMY1_NUM=10//µĞÈËÊı
+	BULLLET_NUM = 15,//å­å¼¹æ•°
+	ENEMY1_NUM=10//æ•Œäººæ•°
 };
 
-//Í¼Æ¬¼ÓÔØ½ø³ÌĞò
+//å›¾ç‰‡åŠ è½½è¿›ç¨‹åº
 IMAGE bk;
 IMAGE img_role[2];
 IMAGE img_bull[2];
@@ -19,16 +19,16 @@ IMAGE img_enemy1[2];
 
 
 
-struct Plance//·É»ú½á¹¹
+struct Plance//é£æœºç»“æ„
 {
 	double x;
 	double y;
-	bool live;//·É»ú´æ»î
+	bool live;//é£æœºå­˜æ´»
 }player,enemy1[ENEMY1_NUM],bull[BULLLET_NUM];
 
 
 
-void loadImg()//¼ÓÔØÍ¼Æ¬
+void loadImg()//åŠ è½½å›¾ç‰‡
 {
 	loadimage(&bk, "background.png");
 	loadimage(&img_role[0], "we3.png");
@@ -40,7 +40,7 @@ void loadImg()//¼ÓÔØÍ¼Æ¬
 
 }
 
-void GameInit()//³õÊ¼»¯
+void GameInit()//åˆå§‹åŒ–
 {
 	loadImg();
 	player.x = WIDTH / 2;
@@ -60,14 +60,14 @@ void GameInit()//³õÊ¼»¯
 }
 
 
-void GameDraw()//ÌùÍ¼
+void GameDraw()//è´´å›¾
 {
-	//Ìù±³¾°Í¼
+	//è´´èƒŒæ™¯å›¾
 	putimage(0, 0, &bk);
 	putimage(player.x,player.y, &img_role[0],NOTSRCERASE);
 	putimage(player.x, player.y, &img_role[1],SRCINVERT);
 	
-	for (int i = 0;i < BULLLET_NUM;i++)//Ìù×Óµ¯Í¼
+	for (int i = 0;i < BULLLET_NUM;i++)//è´´å­å¼¹å›¾
 	{
 		if (bull[i].live)
 		{
@@ -77,7 +77,7 @@ void GameDraw()//ÌùÍ¼
 		
 	}
 	
-	for (int i = 0;i < ENEMY1_NUM;i++)//ÌùµĞÈËÍ¼
+	for (int i = 0;i < ENEMY1_NUM;i++)//è´´æ•Œäººå›¾
 	{
 		if (enemy1[i].live)
 		{
@@ -87,7 +87,7 @@ void GameDraw()//ÌùÍ¼
 
 	}
 }
-void createBullet()//×Óµ¯²úÉú 
+void createBullet()//å­å¼¹äº§ç”Ÿ 
 {
 	for (int i = 0;i < BULLLET_NUM;i++)
 	{
@@ -102,7 +102,7 @@ void createBullet()//×Óµ¯²úÉú
 
 }
 
-void BulletMove(double speed)//×Óµ¯ÒÆ¶¯
+void BulletMove(double speed)//å­å¼¹ç§»åŠ¨
 {
 
 	for (int i = 0;i < BULLLET_NUM;i++)
@@ -119,7 +119,7 @@ void BulletMove(double speed)//×Óµ¯ÒÆ¶¯
 
 }
 
-void createEnemy1()//µĞÈË1²úÉú
+void createEnemy1()//æ•Œäºº1äº§ç”Ÿ
 {
 
 	for (int i = 0;i < ENEMY1_NUM;i++)
@@ -135,7 +135,7 @@ void createEnemy1()//µĞÈË1²úÉú
 	}
 }
 
-void Enemy1Move(double speed)//µĞÈË1ÒÆ¶¯
+void Enemy1Move(double speed)//æ•Œäºº1ç§»åŠ¨
 {
 	for (int i = 0;i < ENEMY1_NUM;i++)
 	{
@@ -151,16 +151,16 @@ void Enemy1Move(double speed)//µĞÈË1ÒÆ¶¯
 	
 }
 
-void playerMove(double speed)//Íæ¼ÒÒÆ¶¯
+void playerMove(double speed)//ç©å®¶ç§»åŠ¨
 {
-	//¼ì²âÊÇ·ñÓĞ¼üÅÌ°´ÏÂ£¬Èç¹ûÓĞ·µ»ØÕæ£¬Ã»ÓĞ·µ»Ø¼Ù£¬½â¾öÁË×èÈûÎÊÌâ
-	// ÁíÍâÒ»ÖÖ½â¾ö×èÈûµÄ°ì·¨ÊÇÊ¹ÓÃ#if GetAsyncKeyState(VK_UP)
-	// ·Ç×èÈûº¯Êı£¬ºÜË¿»¬
-	//1,_getch()×èÈûº¯Êı£¬Ã»ÊäÈë¾Í»á¿¨×¡£¬ĞèÒªÍ·º¯Êıconio.h
-#if 0//Õâ¸öÊäÈëº¯Êı±ØĞëÓÃ´óĞ´×ÖÄ¸
+	//æ£€æµ‹æ˜¯å¦æœ‰é”®ç›˜æŒ‰ä¸‹ï¼Œå¦‚æœæœ‰è¿”å›çœŸï¼Œæ²¡æœ‰è¿”å›å‡ï¼Œè§£å†³äº†é˜»å¡é—®é¢˜
+	// å¦å¤–ä¸€ç§è§£å†³é˜»å¡çš„åŠæ³•æ˜¯ä½¿ç”¨#if GetAsyncKeyState(VK_UP)
+	// éé˜»å¡å‡½æ•°ï¼Œå¾ˆä¸æ»‘
+	//1,_getch()é˜»å¡å‡½æ•°ï¼Œæ²¡è¾“å…¥å°±ä¼šå¡ä½ï¼Œéœ€è¦å¤´å‡½æ•°conio.h
+#if 0//è¿™ä¸ªè¾“å…¥å‡½æ•°å¿…é¡»ç”¨å¤§å†™å­—æ¯
 	if (_kbhit())
 	{
-		char key = _getch();//¶ÁÈ¡¼üÅÌ²Ù×÷
+		char key = _getch();//è¯»å–é”®ç›˜æ“ä½œ
 		switch (key)
 		{
 		case 'w':
@@ -211,14 +211,14 @@ void playerMove(double speed)//Íæ¼ÒÒÆ¶¯
 
 #endif
 	static DWORD t1 = 0, t2 = 0,t3=0,t4=0;
-	if (GetAsyncKeyState(VK_SPACE)&&t2-t1>500)//´´½¨×Óµ¯
+	if (GetAsyncKeyState(VK_SPACE)&&t2-t1>500)//åˆ›å»ºå­å¼¹
 	{
 		createBullet();
 		t1 = t2;
 	}
 	t2 = GetTickCount();
 
-	if (t4 - t3 > 5000)//´´½¨µĞÈË
+	if (t4 - t3 > 5000)//åˆ›å»ºæ•Œäºº
 	{
 		createEnemy1();
 		t3 = t4;
@@ -227,19 +227,39 @@ void playerMove(double speed)//Íæ¼ÒÒÆ¶¯
 
 }
 
+void playPlance()
+{
+	for (int i = 0;i < ENEMY1_NUM;i++)
+	{
+		if (!enemy1[i].live)
+			continue;
+		for (int k = 0;k < BULLLET_NUM;k++)
+		{
+			if (!bull[k].live)
+				continue;
+			if (bull[k].x > enemy1[i].x && bull[k].x<enemy1[1].x + enemy1[i].widtd
+				&& bull[k].y>enemy1[i].y && bull[k].y < enemy1[i].y + enemy1[i].height)
+			{
+
+			}
+		}
+	}
+}
+
+
 int main()
 {
-	//´´½¨´°¿Ú
+	//åˆ›å»ºçª—å£
 	initgraph(WIDTH,HEIGHT,SHOWCONSOLE);
 	GameInit();
-	BeginBatchDraw();//¿ªÊ¼Ë«»º³å
+	BeginBatchDraw();//å¼€å§‹åŒç¼“å†²
 	while (1)
 	{
-		GameDraw();//ÌùÍ¼
-		EndBatchDraw();//½áÊøË«»º³å
-		playerMove(0.1);//Íæ¼ÒÒÆ¶¯
-		BulletMove(0.1);//×Óµ¯ÒÆ¶¯
-		Enemy1Move(0.05);//µĞÈË1ÒÆ¶¯
+		GameDraw();//è´´å›¾
+		EndBatchDraw();//ç»“æŸåŒç¼“å†²
+		playerMove(0.1);//ç©å®¶ç§»åŠ¨
+		BulletMove(0.1);//å­å¼¹ç§»åŠ¨
+		Enemy1Move(0.05);//æ•Œäºº1ç§»åŠ¨
 
 
 	
